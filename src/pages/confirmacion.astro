@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import { INTEGRATIONS, u, wa } from '../config';
+---
+<Base title="Confirmación de compra" description="Estado de tu compra en Blank Hotel Recoleta." solid>
+  <section class="page-top sec" style="min-height:80vh">
+    <div class="wrap" data-confirm data-endpoint={INTEGRATIONS.paymentCheckoutEndpoint}>
+      <p class="eyebrow">Tu compra</p>
+      <h1 class="h2" style="margin:30px 0 26px" data-title>Verificando <em>tu compra…</em></h1>
+      <p class="body" data-text>Estamos consultando el estado de tu pago.</p>
+      <div class="room__acts" style="margin-top:40px">
+        <a class="btn btn--dark" href={u('experiencias')}><span>Ver experiencias</span></a>
+        <a class="link" href={wa('Hola, quiero consultar por el estado de mi compra en el Spa de Blank Hotel.')} target="_blank" rel="noopener">Consultar por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  import { clearCart } from '../scripts/cart';
+  // El estado se consulta SIEMPRE al backend: nunca se confía en parámetros de la URL.
+  document.addEventListener('astro:page-load', async () => {
+    const root = document.querySelector<HTMLElement>('[data-confirm]');
+    if (!root) return;
+    const title = root.querySelector<HTMLElement>('[data-title]')!;
+    const text = root.querySelector<HTMLElement>('[data-text]')!;
+    const order = new URLSearchParams(location.search).get('orden');
+    const endpoint = root.dataset.endpoint;
+    const set = (t: string, p: string) => { title.innerHTML = t; text.textContent = p; };
+    if (!endpoint || !order) return set('No encontramos <em>una compra.</em>', 'No hay ninguna compra para confirmar en este momento. Si realizaste un pago y tenés dudas, escribinos.');
+    try {
+      const res = await fetch(`${endpoint.replace(/\/$/, '')}/${encodeURIComponent(order)}`);
+      const data = await res.json();
+      if (data.status === 'approved') { clearCart(); set('¡Gracias! Tu compra <em>está confirmada.</em>', 'Te enviamos el detalle por email. El Spa se pondrá en contacto para coordinar tu visita.'); }
+      else if (data.status === 'pending') set('Tu pago está <em>en proceso.</em>', 'Apenas se acredite te enviamos la confirmación por email.');
+      else set('El pago <em>no se completó.</em>', 'No se realizó ningún cobro. Podés intentarlo nuevamente desde tu carrito.');
+    } catch {
+      set('No pudimos verificar <em>tu compra.</em>', 'Probá recargar la página en unos minutos o escribinos por WhatsApp.');
+    }
+  });
+</script>

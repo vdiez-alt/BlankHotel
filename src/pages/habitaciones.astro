@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import BookingBar from '../components/BookingBar.astro';
+import { rooms } from '../data/rooms';
+import { SITE, INTEGRATIONS, u } from '../config';
+const reserve = INTEGRATIONS.bookingEngineUrl || '#reservar';
+---
+<Base title="Habitaciones" description="Habitaciones de Blank Hotel Recoleta: Deluxe Queen, Grand Deluxe Queen y King, Balcony Junior y Suite Ejecutiva Buenos Aires. Desayuno incluido." image="grand-deluxe-king-1.jpg">
+  <section class="hero hero--short">
+    <div class="hero__bg"><img src={u('images/deluxe-queen-1.jpg')} alt="Habitación Deluxe Queen de Blank Hotel Recoleta" fetchpriority="high" data-parallax="-0.18" /></div>
+    <div class="hero__scrim"></div>
+    <div class="hero__content">
+      <h1 class="h1" data-lines>Espacios pensados<br />para <em>quedarse.</em></h1>
+      <div class="hero__intro" data-reveal style="--d:.5s"><p class="eyebrow">Habitaciones</p><p>Cinco categorías de 26 a 62 m², todas con desayuno incluido.</p></div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <nav class="anchors" aria-label="Categorías" data-reveal>
+      {rooms.map((r) => <a href={`#${r.slug}`}>{r.name}</a>)}
+    </nav>
+    {rooms.map((r, i) => (
+      <section class="room" id={r.slug} style="scroll-margin-top:90px">
+        <div class="room__gal" data-gallery data-reveal>
+          <div class="gal">
+            {r.images.map((img, k) => (
+              <div class:list={['gal__s', { 'is-on': k === 0 }]}><img src={u(`images/${img}`)} alt={`${r.name} — foto ${k + 1}`} loading="lazy" /></div>
+            ))}
+            <div class="gal__ui">
+              <button type="button" data-prev aria-label="Foto anterior">←</button>
+              <span>01 / {String(r.images.length).padStart(2, '0')}</span>
+              <button type="button" data-next aria-label="Foto siguiente">→</button>
+            </div>
+          </div>
+          <div class="thumbs">
+            {r.images.map((img, k) => <button type="button" aria-label={`Ver foto ${k + 1}`}><img src={u(`images/${img}`)} alt="" loading="lazy" /></button>)}
+          </div>
+        </div>
+        <div class="room__txt">
+          <p class="eyebrow" data-reveal>{String(i + 1).padStart(2, '0')} / {String(rooms.length).padStart(2, '0')}</p>
+          <h2 class="h2" data-lines>{r.name}</h2>
+          <p class="room__meta cap" data-reveal><span>{r.area}</span><span>{r.beds}</span></p>
+          <p class="body" data-reveal>{r.description}</p>
+          <ul class="amen" data-reveal>
+            {r.amenities.map((a) => <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7.5-8" /></svg>{a}</li>)}
+          </ul>
+          {r.notice && <p class="notice" data-reveal>{r.notice}</p>}
+          <div class="room__acts" data-reveal>
+            <a class="btn btn--dark" href={reserve}><span>Reservar</span></a>
+            <span class="cap" style="color:var(--earth)">Check-in {SITE.checkIn} · Check-out {SITE.checkOut}</span>
+          </div>
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <section class="sec stone">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow" data-reveal>Reservas</p><h2 class="h2" data-lines>Consultá <em>disponibilidad.</em></h2></div>
+        <p class="info-row" style="margin:0" data-reveal><span>Check-in <b>{SITE.checkIn}</b></span><span>Check-out <b>{SITE.checkOut}</b></span><span><b>Desayuno incluido</b></span></p>
+      </div>
+      <div data-reveal><BookingBar flat /></div>
+    </div>
+  </section>
+</Base>

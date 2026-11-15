@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+import BookingBar from '../components/BookingBar.astro';
+import ExperienceCard from '../components/ExperienceCard.astro';
+import { rooms } from '../data/rooms';
+import { experiences } from '../data/experiences';
+import { SITE, INTEGRATIONS, u } from '../config';
+
+const featured = rooms.filter((r) => r.featured);
+const reserve = INTEGRATIONS.bookingEngineUrl || '#reservar';
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Hotel',
+  name: SITE.name,
+  description: 'Hotel cuatro estrellas con Spa en Recoleta, Buenos Aires.',
+  url: Astro.site,
+  image: new URL(u('images/hero-home.jpg'), Astro.site),
+  telephone: '+54 11 4800-1992',
+  starRating: { '@type': 'Rating', ratingValue: 4 },
+  checkinTime: '15:00',
+  checkoutTime: '12:00',
+  address: { '@type': 'PostalAddress', streetAddress: 'Peña 2049', addressLocality: 'Recoleta, Ciudad Autónoma de Buenos Aires', addressCountry: 'AR' },
+  sameAs: [SITE.instagramHref],
+  amenityFeature: ['Spa', 'Sauna', 'Sala de vapor', 'Gimnasio', 'Wi-Fi', 'Estacionamiento', 'Desayuno incluido'].map((name) => ({ '@type': 'LocationFeatureSpecification', name, value: true })),
+};
+---
+<Base
+  title="Blank Hotel Recoleta | Hotel & Spa en Recoleta, Buenos Aires"
+  description="Hotel cuatro estrellas con Spa en Recoleta, Buenos Aires. Habitaciones amplias con desayuno incluido y experiencias de bienestar para huéspedes y visitantes."
+  jsonld={jsonld}
+>
+  <section class="hero">
+    <div class="hero__bg"><img src={u('images/hero-home.jpg')} alt="Habitación de Blank Hotel con vista a Recoleta" fetchpriority="high" data-parallax="-0.18" style="object-position:50% 38%" /></div>
+    <div class="hero__scrim"></div>
+    <div class="scroll-ind" aria-hidden="true">SCROLL</div>
+    <div class="hero__content">
+      <h1 class="h1" data-lines>Una experiencia<br /><em>única</em> en Recoleta.</h1>
+      <div class="hero__intro" data-reveal style="--d:.5s">
+        <p class="eyebrow">Hotel &amp; Spa</p>
+        <p>Hotel &amp; Spa en el corazón de Buenos Aires, donde el diseño, el confort y el bienestar se encuentran.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap" style="padding:0;--d:.7s" data-reveal><BookingBar /></div>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow" data-reveal>Blank Hotel Recoleta</p>
+          <h2 class="h2" data-lines>Dos formas de <em>vivirlo.</em></h2>
+        </div>
+      </div>
+      <div class="doors">
+        <a class="door" href={u('habitaciones')} data-reveal="img">
+          <div class="door__img"><img src={u('images/grand-deluxe-king-1.jpg')} alt="Habitación de Blank Hotel Recoleta" loading="lazy" data-parallax="0.08" style="object-position:30% 50%" /></div>
+          <div class="door__in">
+            <div class="door__top cap"><span>A</span><span>Alojamiento</span></div>
+            <div>
+              <p class="door__name">Hotel</p>
+              <p>Habitaciones amplias en Recoleta, con desayuno incluido.</p>
+              <span class="btn btn--solid on-photo"><span>Ver habitaciones</span></span>
+              <div class="door__facts cap"><span>De 26 a 62 m²</span><span>Check-in 15:00</span><span>Check-out 12:00</span></div>
+            </div>
+          </div>
+        </a>
+        <a class="door" href={u('spa')} data-reveal="img" style="--d:.15s">
+          <div class="door__img"><img src={u('images/spa-vertical.jpg')} alt="Spa de Blank Hotel Recoleta" loading="lazy" data-parallax="0.08" /></div>
+          <div class="door__in">
+            <div class="door__top cap"><span>B</span><span>Bienestar</span></div>
+            <div>
+              <p class="door__name"><em>Spa</em></p>
+              <p>Una experiencia de bienestar que también podés disfrutar sin alojarte en el hotel.</p>
+              <span class="btn btn--solid on-photo"><span>Descubrir el Spa</span></span>
+              <div class="door__facts cap"><span>Huéspedes y visitantes</span><span>Compra online</span></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec dark">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow" data-reveal>Habitaciones</p>
+          <h2 class="h2" data-lines>Espacios pensados<br />para <em>quedarse.</em></h2>
+        </div>
+        <a class="link" href={u('habitaciones')} data-reveal>Ver todas las habitaciones</a>
+      </div>
+      <div class="rcards">
+        {featured.map((r, i) => (
+          <article class="rcard" data-reveal style={`--d:${i * 0.1}s`}>
+            <a class="rcard__ph media" href={u(`habitaciones#${r.slug}`)} aria-label={r.name}>
+              <img src={u(`images/${r.images[0]}`)} alt={`Habitación ${r.name}`} loading="lazy" />
+              <span class="rcard__m2">{r.areaShort}</span>
+            </a>
+            <p class="rcard__idx">{String(i + 1).padStart(2, '0')} — {r.beds}</p>
+            <h3 class="h3"><a href={u(`habitaciones#${r.slug}`)}>{r.name}</a></h3>
+            <p class="rcard__dif">{r.highlight}</p>
+            <div class="rcard__act">
+              <a class="link link--bare" href={u(`habitaciones#${r.slug}`)}>Conocer</a>
+              <a class="btn btn--sm" href={reserve}><span>Reservar</span></a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="info-row" data-reveal><span>Check-in <b>{SITE.checkIn}</b></span><span>Check-out <b>{SITE.checkOut}</b></span><span><b>Desayuno incluido</b></span></p>
+    </div>
+  </section>
+
+  <section class="spa-block graphite">
+    <p class="eyebrow eyebrow--center" data-reveal>Spa &amp; Wellness</p>
+    <h2 class="spa-block__title" data-lines>Make room<br /><span class="r">for yourself.</span></h2>
+    <div class="spa-block__pano media" data-reveal="expand">
+      <div class="par"><img src={u('images/spa-panoramica.webp')} alt="Hidromasaje del Spa de Blank Hotel Recoleta" loading="lazy" data-parallax="0.14" style="object-position:50% 60%" /></div>
+    </div>
+    <div class="wrap spa-block__row">
+      <p class="lead" data-reveal>Una experiencia de bienestar que también podés disfrutar <em>sin alojarte en el hotel.</em></p>
+      <div class="spa-block__side" data-reveal style="--d:.15s">
+        <small>Abierto a huéspedes y visitantes</small>
+        <a class="btn btn--solid" href={u('spa')}><span>Descubrir el Spa</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec stone" data-carousel style="overflow:hidden">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow" data-reveal>Experiencias</p>
+          <h2 class="h2" data-lines>Regalate <em>una pausa.</em></h2>
+        </div>
+        <div class="carousel__ctl" data-reveal>
+          <span class="carousel__count">01 / 06</span>
+          <button class="carousel__btn" type="button" data-prev aria-label="Anterior">←</button>
+          <button class="carousel__btn" type="button" data-next aria-label="Siguiente">→</button>
+        </div>
+      </div>
+    </div>
+    <div class="carousel__track">
+      {experiences.map((e, i) => <ExperienceCard e={e} n={i + 1} delay={Math.min(i, 3) * 0.1} />)}
+    </div>
+    <div class="carousel__bar"><i></i></div>
+    <div class="wrap" style="margin-top:44px"><a class="link" href={u('experiencias')} data-reveal>Ver todas las experiencias</a></div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap split split--wide-r">
+      <div>
+        <p class="eyebrow" data-reveal>Ubicación</p>
+        <h2 class="h2" data-lines>Recoleta también<br />es parte de<br /><em>la experiencia.</em></h2>
+        <p class="body" data-reveal>A pasos de los principales atractivos culturales y comerciales del barrio.</p>
+        <ul class="rows" data-reveal>
+          <li><b>Ateneo Grand Splendid</b><i>01</i></li>
+          <li><b>Shopping Patio Bullrich</b><i>02</i></li>
+          <li><b>Parque 3 de Febrero</b><i>03</i></li>
+        </ul>
+        <a class="link" href={u('ubicacion')} data-reveal>Descubrir la ubicación</a>
+      </div>
+      <div style="position:relative">
+        <div class="media tall" data-reveal="img"><div class="par"><img src={u('images/balcony-junior-1.jpg')} alt="Vista a Recoleta desde un balcón de Blank Hotel" loading="lazy" data-parallax="0.1" /></div></div>
+        <div class="dark" style="position:absolute;left:clamp(-60px,-4vw,0px);bottom:60px;padding:28px 32px;z-index:2;--d:.3s" data-reveal>
+          <p class="cap" style="color:var(--grey)">Dirección</p>
+          <p class="h3" style="margin-top:8px">{SITE.address}<br />{SITE.district}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

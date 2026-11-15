@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, u, wa } from '../config';
+---
+<Base title="Ubicación en Recoleta" description="Blank Hotel está en Peña 2049, Recoleta, Buenos Aires: cerca del Ateneo Grand Splendid, Patio Bullrich y el Parque 3 de Febrero." image="balcony-junior-1.jpg">
+  <section class="hero hero--short">
+    <div class="hero__bg"><img src={u('images/hero-home.jpg')} alt="Vista a Recoleta desde una habitación de Blank Hotel" fetchpriority="high" data-parallax="-0.18" style="object-position:50% 30%" /></div>
+    <div class="hero__scrim"></div>
+    <div class="hero__content">
+      <h1 class="h1" data-lines>Recoleta,<br /><em>a tu puerta.</em></h1>
+      <div class="hero__intro" data-reveal style="--d:.5s"><p class="eyebrow">Ubicación</p><p>Alojarse en Blank es vivir uno de los barrios más elegantes de Buenos Aires.</p></div>
+    </div>
+  </section>
+
+  <section class="sec stone" style="overflow:hidden">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Dirección</p>
+      <p class="big-addr" data-lines style="margin:30px 0 50px">Peña <em>2049</em></p>
+      <div class="split">
+        <p class="lead" data-reveal>{SITE.fullAddress}.</p>
+        <div data-reveal style="--d:.15s">
+          <p class="body">Recoleta también es parte de la experiencia: cultura, compras y espacios verdes, cerca del hotel.</p>
+          <div class="room__acts" style="margin-top:34px">
+            <a class="btn btn--dark" href={SITE.mapsLink} target="_blank" rel="noopener"><span>Cómo llegar</span></a>
+            <a class="link" href={u('contacto')}>Contacto</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap split split--wide-r">
+      <div>
+        <p class="eyebrow" data-reveal>El barrio</p>
+        <h2 class="h2" data-lines>Cerca de<br /><em>todo.</em></h2>
+        <ul class="rows rows--big" data-reveal>
+          <li><b>Ateneo Grand Splendid</b><i>Librería</i></li>
+          <li><b>Shopping Patio Bullrich</b><i>Compras</i></li>
+          <li><b>Parque 3 de Febrero</b><i>Aire libre</i></li>
+        </ul>
+        <p class="body" data-reveal>Y los principales atractivos culturales y comerciales de Recoleta.</p>
+      </div>
+      <div class="duo duo--r flip">
+        <div class="duo__a media" data-reveal="img"><div class="par"><img src={u('images/balcony-junior-1.jpg')} alt="Balcón con vista al barrio de Recoleta" loading="lazy" data-parallax="0.09" /></div></div>
+        <div class="duo__b media" data-reveal="img" style="--d:.2s"><img src={u('images/balcony-junior-2.jpg')} alt="Balcón privado de Blank Hotel" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" style="padding-bottom:clamp(70px,9vw,120px)">
+    <div class="map" data-reveal="fade"><iframe src={SITE.mapsEmbed} title="Mapa: Blank Hotel Recoleta, Peña 2049" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+    <div class="wrap" style="margin-top:clamp(50px,7vw,90px)">
+      <div class="split">
+        <div><p class="eyebrow" data-reveal>Datos de contacto</p><h2 class="h2" data-lines style="margin-top:30px">Te <em>esperamos.</em></h2></div>
+        <div class="contact-list" style="border-color:var(--line-dark)" data-reveal>
+          <a href={SITE.mapsLink} target="_blank" rel="noopener" style="border-color:var(--line-dark)"><span style="color:var(--grey)">Dirección</span><b>{SITE.address}, Recoleta</b></a>
+          <a href={SITE.phoneHref} style="border-color:var(--line-dark)"><span style="color:var(--grey)">Teléfono</span><b>{SITE.phoneLabel}</b></a>
+          <a href={wa()} target="_blank" rel="noopener" style="border-color:var(--line-dark)"><span style="color:var(--grey)">WhatsApp</span><b>{SITE.whatsappLabel}</b></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

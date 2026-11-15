@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import Catalog from '../components/Catalog.astro';
+import { INTEGRATIONS, SITE, u } from '../config';
+---
+<Base title="Finalizar compra" description="Finalizá la compra de tu experiencia de Spa en Blank Hotel Recoleta." solid>
+  <section class="page-top sec" style="padding-bottom:clamp(70px,9vw,130px)">
+    <div class="wrap">
+      <p class="steps"><span class="is-on">1 Tus datos</span><span>2 Resumen</span><span>3 Pago</span><span>4 Confirmación</span></p>
+      <h1 class="h2" style="margin:30px 0 40px">Finalizar <em>compra.</em></h1>
+      <div class="cart" data-checkout-root data-endpoint={INTEGRATIONS.paymentCheckoutEndpoint} data-wa={SITE.whatsappNumber} data-shop={u('experiencias')} data-confirm={u('confirmacion')}>
+        <form id="co-form" novalidate>
+          <p class="cap">Datos personales</p>
+          <div class="form form--2" style="margin-top:18px">
+            <div class="field"><label for="co-n">Nombre</label><input id="co-n" name="nombre" autocomplete="given-name" required /><span class="err">Ingresá tu nombre.</span></div>
+            <div class="field"><label for="co-a">Apellido</label><input id="co-a" name="apellido" autocomplete="family-name" required /><span class="err">Ingresá tu apellido.</span></div>
+            <div class="field"><label for="co-e">Email</label><input id="co-e" name="email" type="email" autocomplete="email" required /><span class="err">Ingresá un email válido.</span></div>
+            <div class="field"><label for="co-t">Teléfono</label><input id="co-t" name="telefono" type="tel" autocomplete="tel" required pattern="[0-9+()\s-]{6,}" /><span class="err">Ingresá un teléfono de contacto.</span></div>
+            <div class="field full"><label for="co-c">Comentarios (opcional)</label><textarea id="co-c" name="comentarios" maxlength="500"></textarea></div>
+          </div>
+          <p class="pending" data-pay-note hidden></p>
+          <div class="room__acts">
+            <button class="btn btn--dark" type="submit" data-pay><span>Ir a pagar</span></button>
+            <button class="btn" type="button" data-wa-order><span>Enviar pedido por WhatsApp</span></button>
+          </div>
+          <p style="font-size:12.5px;color:var(--grey);margin-top:18px;max-width:52ch">El pago se realiza en la plataforma segura de la pasarela. Este sitio no almacena datos de tarjetas.</p>
+        </form>
+        <aside class="summary" data-summary></aside>
+      </div>
+    </div>
+  </section>
+  <Catalog />
+</Base>
+<script>
+  import { lines, subtotal, ars, nice } from '../scripts/order';
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  document.addEventListener('astro:page-load', () => {
+    const root = document.querySelector<HTMLElement>('[data-checkout-root]');
+    if (!root) return;
+    const form = root.querySelector<HTMLFormElement>('#co-form')!;
+    const sum = root.querySelector<HTMLElement>('[data-summary]')!;
+    const note = root.querySelector<HTMLElement>('[data-pay-note]')!;
+    const pay = root.querySelector<HTMLButtonElement>('[data-pay]')!;
+    const endpoint = root.dataset.endpoint || '';
+    const ls = lines();
+    if (!ls.length) {
+      root.style.display = 'block';
+      root.innerHTML = `<div class="empty"><p class="lead">No hay experiencias en tu carrito.</p><a class="btn btn--dark" style="margin-top:30px" href="${root.dataset.shop}"><span>Ver experiencias</span></a></div>`;
+      return;
+    }
+    sum.innerHTML = `<p class="cap" style="margin-bottom:14px">Resumen de compra</p>
+      ${ls.map((l) => `<div class="line"><span>${l.item.qty} × ${esc(l.entry.name)}${l.variantName ? ' (' + esc(l.variantName) + ')' : ''}${l.item.date ? `<br><small style="margin:0">Fecha preferida: ${nice(l.item.date)}</small>` : ''}</span><span>${ars(l.total)}</span></div>`).join('')}
+      <div class="line"><span>Subtotal</span><span>${ars(subtotal(ls))}</span></div>
+      <div class="line total"><span>Total</span><span>${ars(subtotal(ls))}</span></div>
+      <small>Precios en pesos argentinos. La fecha y el horario quedan sujetos a la disponibilidad del Spa.</small>`;
+    if (!endpoint) {
+      pay.disabled = true;
+      note.hidden = false;
+      note.innerHTML = '<b>El pago online estará disponible próximamente.</b> Por ahora podés enviarnos tu pedido por WhatsApp y coordinamos el pago y el horario con vos.';
+    }
+    const validate = () => {
+      let ok = true;
+      form.querySelectorAll<HTMLInputElement>('input[required]').forEach((i) => {
+        const bad = !i.checkValidity() || !i.value.trim();
+        i.closest('.field')!.classList.toggle('is-bad', bad);
+        if (bad && ok) i.focus();
+        if (bad) ok = false;
+      });
+      return ok;
+    };
+    form.addEventListener('input', (e) => (e.target as HTMLElement).closest('.field')?.classList.remove('is-bad'));
+    const customer = () => Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+
+    root.querySelector('[data-wa-order]')!.addEventListener('click', () => {
+      if (!validate()) return;
+      const c = customer();
+      const text = `Hola, quiero comprar estas experiencias del Spa de Blank Hotel:\n` +
+        ls.map((l) => `• ${l.item.qty} × ${l.entry.name}${l.variantName ? ' (' + l.variantName + ')' : ''} — ${ars(l.total)}${l.item.date ? ' — fecha preferida ' + nice(l.item.date) : ''}`).join('\n') +
+        `\nTotal: ${ars(subtotal(ls))}\n\nNombre: ${c.nombre} ${c.apellido}\nEmail: ${c.email}\nTeléfono: ${c.telefono}${c.comentarios ? '\nComentarios: ' + c.comentarios : ''}`;
+      window.open(`https://wa.me/${root.dataset.wa}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    });
+
+    // Pago online: el backend crea la orden, valida precios y disponibilidad,
+    // y devuelve la URL de la pasarela. Nunca se confirma una compra desde el navegador.
+    let sending = false;
+    const key = crypto.randomUUID?.() || String(Date.now());
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!endpoint || sending || !validate()) return;
+      sending = true;
+      pay.disabled = true;
+      note.hidden = false;
+      note.textContent = 'Preparando el pago seguro…';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Idempotency-Key': key },
+          body: JSON.stringify({ customer: customer(), items: ls.map((l) => l.item), returnUrl: new URL(root.dataset.confirm!, location.origin).toString() }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.redirectUrl) throw new Error(data.message || 'error');
+        window.location.href = data.redirectUrl;
+      } catch {
+        note.innerHTML = '<b>No pudimos iniciar el pago.</b> Probá de nuevo en unos minutos o envianos tu pedido por WhatsApp.';
+        sending = false;
+        pay.disabled = false;
+      }
+    });
+  });
+</script>

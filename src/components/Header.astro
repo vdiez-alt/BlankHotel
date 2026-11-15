@@ -1,0 +1,34 @@
+---
+import { NAV, SITE, INTEGRATIONS, u, wa } from '../config';
+const { solid = false } = Astro.props;
+const path = Astro.url.pathname;
+const reserve = INTEGRATIONS.bookingEngineUrl || u('#reservar');
+const isOn = (href: string) => path.replace(/\/$/, '').endsWith('/' + href) || path.includes(`/${href}/`) || (href === 'spa' && path.includes('/experiencias'));
+---
+<header class:list={['header', { 'is-solid': solid }]} data-solid={solid ? '' : undefined}>
+  <a class="header__logo" href={u('')} aria-label={`${SITE.name} — inicio`}>
+    <img src={u('images/logo-blank-hotel-recoleta-transparente.png')} alt={SITE.name} width="200" height="200" />
+  </a>
+  <nav class="nav" aria-label="Principal">
+    {NAV.map((n) => <a href={u(n.href)} aria-current={isOn(n.href) ? 'page' : undefined}>{n.label}</a>)}
+  </nav>
+  <div class="header__right">
+    <a class="cart-link" href={u('carrito')} aria-label="Carrito de experiencias">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span data-cart-count>0</span>
+    </a>
+    <a class="btn btn--solid btn--sm on-photo" href={reserve}><span>Reservar</span></a>
+    <button class="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mmenu"><span></span><span></span></button>
+  </div>
+</header>
+<div class="mmenu" id="mmenu">
+  <nav aria-label="Menú móvil">
+    {NAV.map((n) => <a href={u(n.href)}>{n.label}</a>)}
+    <a href={reserve}><em>Reservar</em></a>
+  </nav>
+  <div class="mmenu__foot">
+    <span>{SITE.address}, {SITE.district}</span>
+    <a href={SITE.phoneHref}>Tel. {SITE.phoneLabel}</a>
+    <a href={wa()} target="_blank" rel="noopener">WhatsApp {SITE.whatsappLabel}</a>
+  </div>
+</div>

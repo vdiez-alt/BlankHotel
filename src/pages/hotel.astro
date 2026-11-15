@@ -1,0 +1,99 @@
+---
+import Base from '../layouts/Base.astro';
+import { hotelServices } from '../data/experiences';
+import { SITE, INTEGRATIONS, u } from '../config';
+const reserve = INTEGRATIONS.bookingEngineUrl || u('#reservar');
+---
+<Base title="El Hotel" description="Blank Hotel Recoleta: hotel cuatro estrellas en Buenos Aires con desayuno incluido, Boutique Café, Lobby Bar, gimnasio y Spa." image="lobby.jpg">
+  <section class="hero hero--short">
+    <div class="hero__bg"><img src={u('images/lobby.jpg')} alt="Lobby de Blank Hotel Recoleta" fetchpriority="high" data-parallax="-0.18" /></div>
+    <div class="hero__scrim"></div>
+    <div class="hero__content">
+      <h1 class="h1" data-lines>El hotel,<br /><em>puertas adentro.</em></h1>
+      <div class="hero__intro" data-reveal style="--d:.5s"><p class="eyebrow">El Hotel</p><p>Un cuatro estrellas en Recoleta pensado para descansar bien y sentirse bien atendido.</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap split split--wide-l">
+      <div class="duo">
+        <div class="duo__a media" data-reveal="img"><div class="par"><img src={u('images/recepcion.jpg')} alt="Recepción de Blank Hotel" loading="lazy" data-parallax="0.08" /></div></div>
+        <div class="duo__b media" data-reveal="img" style="--d:.2s"><img src={u('images/cartel.jpg')} alt="Cartel de Blank Hotel Recoleta" loading="lazy" /></div>
+      </div>
+      <div>
+        <p class="eyebrow" data-reveal>Presentación</p>
+        <h2 class="h2 h2--sm" data-lines>Un refugio urbano<br />en el corazón<br />de <em>Recoleta.</em></h2>
+        <p class="body" data-reveal>Un hotel de cuatro estrellas en uno de los barrios más elegantes de Buenos Aires. Habitaciones amplias, desayuno incluido y un Spa para hacer una pausa en medio de la ciudad.</p>
+        <ul class="rows" data-reveal>
+          <li><b>Ubicación privilegiada</b><span>Peña 2049, Recoleta</span></li>
+          <li><b>Habitaciones amplias</b><span>De 26 a 62 m²</span></li>
+          <li><b>Desayuno incluido</b><span>Boutique Café</span></li>
+          <li><b>Confort y privacidad</b><span>Habitaciones insonorizadas</span></li>
+          <li><b>Atención y servicios</b><span>Recepción 24 horas</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec graphite" style="text-align:center">
+    <div class="wrap">
+      <p class="eyebrow eyebrow--center" data-reveal style="color:var(--stone)">Hospitalidad</p>
+      <p class="h2" data-lines style="max-width:17ch;margin:40px auto 0">Que cada huésped encuentre <em>su propio ritmo.</em></p>
+      <p class="body dark" data-reveal style="margin:36px auto 0;background:none">Espacio, silencio y una atención atenta las 24 horas: esa es nuestra manera de recibir.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow" data-reveal>Desayuno incluido</p>
+        <h2 class="h2" data-lines>Boutique <em>Café.</em></h2>
+        <p class="body" data-reveal>Comenzá tus mañanas en un ambiente cálido y acogedor, deleitándote con un exquisito café y una cuidada selección de sabores tradicionales.</p>
+        <div class="hours" data-reveal>
+          <div><span>Lunes a viernes</span><b>07:00 a 10:30</b></div>
+          <div><span>Sábados y domingos</span><b>07:00 a 11:00</b></div>
+        </div>
+      </div>
+      <div class="duo duo--r flip">
+        <div class="duo__a media" data-reveal="img"><div class="par"><img src={u('images/desayuno-1.jpg')} alt="Desayuno buffet en Boutique Café" loading="lazy" data-parallax="0.08" /></div></div>
+        <div class="duo__b media" data-reveal="img" style="--d:.2s"><img src={u('images/desayuno-4.jpg')} alt="Plato de desayuno" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec stone">
+    <div class="wrap split split--wide-l">
+      <div class="media mid" data-reveal="img"><div class="par"><img src={u('images/lobby-bar.jpg')} alt="Lobby Bar de Blank Hotel Recoleta" loading="lazy" data-parallax="0.1" /></div></div>
+      <div>
+        <p class="eyebrow" data-reveal>Bar</p>
+        <h2 class="h2" data-lines>Lobby <em>Bar.</em></h2>
+        <p class="body" data-reveal>Un espacio para relajarte con una selección de snacks y bebidas refrescantes, en un ambiente que combina elegancia y confort. Perfecto para una pausa durante el día o para disfrutar de una velada tranquila.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow" data-reveal>Servicios</p><h2 class="h2" data-lines>Todo lo que <em>necesitás.</em></h2></div>
+      </div>
+      <ul class="chips" data-reveal>
+        {hotelServices.map((s, i) => <li><i>{String(i + 1).padStart(2, '0')}</i>{s}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="bleed">
+    <div class="bleed__bg"><img src={u('images/grand-deluxe-king-2.jpg')} alt="Habitación de Blank Hotel Recoleta" loading="lazy" data-parallax="0.12" /></div>
+    <div class="bleed__scrim"></div>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Habitaciones</p>
+      <h2 class="h2" data-lines>Elegí dónde<br /><em>descansar.</em></h2>
+      <p data-reveal>Cinco categorías de 26 a 62 m², todas con desayuno incluido. Estamos en {SITE.address}, Recoleta.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap" data-reveal>
+        <a class="btn btn--solid" href={u('habitaciones')}><span>Ver habitaciones</span></a>
+        <a class="btn" href={reserve}><span>Reservar</span></a>
+      </div>
+    </div>
+  </section>
+</Base>

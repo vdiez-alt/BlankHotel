@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import ExperienceCard from '../../components/ExperienceCard.astro';
+import { experiences } from '../../data/experiences';
+import { u } from '../../config';
+---
+<Base title="Experiencias de Spa" description="Experiencias de Spa en Buenos Aires: Spa Day, Té de la tarde, Noche Romántica y más en Blank Hotel Recoleta. Comprá online." solid image="spa-te.jpg">
+  <section class="page-top dark" style="padding-bottom:clamp(70px,9vw,130px)">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow" data-reveal>Spa &amp; Wellness — Experiencias</p>
+          <h1 class="h1" data-lines style="margin-top:30px;font-size:clamp(50px,8vw,112px)">Regalate<br /><em>una pausa.</em></h1>
+        </div>
+        <p class="body dark" style="max-width:340px;background:none" data-reveal>Experiencias para disfrutar del Spa, te alojes o no en el hotel. Precios en pesos argentinos.</p>
+      </div>
+      <div class="xgrid">
+        {experiences.map((e, i) => <ExperienceCard e={e} n={i + 1} delay={(i % 3) * 0.1} />)}
+      </div>
+    </div>
+  </section>
+  <section class="sec stone">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow" data-reveal>Cómo funciona</p>
+        <h2 class="h2" data-lines>Simple, <em>de principio a fin.</em></h2>
+      </div>
+      <ul class="rows" data-reveal>
+        <li><b>Elegí tu experiencia</b><i>01</i></li>
+        <li><b>Indicá fecha y cantidad de personas</b><i>02</i></li>
+        <li><b>Completá tus datos</b><i>03</i></li>
+        <li><b>Confirmá tu compra</b><i>04</i></li>
+      </ul>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,21 @@
+---
+import { type Experience, hasRange, isPurchasable, priceLabel } from '../data/experiences';
+import { u } from '../config';
+interface Props { e: Experience; n: number; delay?: number }
+const { e, n, delay = 0 } = Astro.props;
+const href = u(`experiencias/${e.slug}`);
+const direct = isPurchasable(e) && e.variants.length === 0;
+---
+<article class="xcard" data-reveal style={`--d:${delay}s`}>
+  <a class="xcard__ph media" href={href} aria-label={e.name} draggable="false">
+    <img src={u(`images/${e.images[0]}`)} alt={`${e.name} — Spa de Blank Hotel Recoleta`} loading="lazy" draggable="false" />
+  </a>
+  <p class="xcard__n">{String(n).padStart(2, '0')}</p>
+  <h3><a href={href}>{e.name}</a></h3>
+  <div class="xcard__foot">
+    <p class="price"><small>{hasRange(e) ? 'Desde' : 'Precio'}</small>{priceLabel(e)}</p>
+    {direct
+      ? <button class="xcard__cta" type="button" data-add={e.slug} data-name={e.name}>Añadir al carrito</button>
+      : <a class="xcard__cta" href={href}>Ver producto</a>}
+  </div>
+</article>

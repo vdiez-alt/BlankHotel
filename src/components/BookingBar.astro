@@ -1,0 +1,22 @@
+---
+import { INTEGRATIONS, SITE } from '../config';
+const { flat = false } = Astro.props;
+---
+<form class:list={['booking', { 'booking--flat': flat }]} id="reservar" data-booking data-engine={INTEGRATIONS.bookingEngineUrl} data-wa={SITE.whatsappNumber} novalidate>
+  <div class="booking__f"><label for="bk-in">Check-in</label><input id="bk-in" type="date" name="checkin" required /></div>
+  <div class="booking__f"><label for="bk-out">Check-out</label><input id="bk-out" type="date" name="checkout" required /></div>
+  <div class="booking__f">
+    <label for="bk-ad">Huéspedes</label>
+    <select id="bk-ad" name="adults">
+      {[1, 2, 3, 4, 5, 6].map((n) => <option value={n} selected={n === 2}>{n} {n === 1 ? 'huésped' : 'huéspedes'}</option>)}
+    </select>
+  </div>
+  <div class="booking__f">
+    <label for="bk-ro">Habitaciones</label>
+    <select id="bk-ro" name="rooms">
+      {[1, 2, 3, 4].map((n) => <option value={n}>{n} {n === 1 ? 'habitación' : 'habitaciones'}</option>)}
+    </select>
+  </div>
+  <button class="booking__go" type="submit">Buscar disponibilidad <i aria-hidden="true">→</i></button>
+  <p class="booking__msg" role="status" aria-live="polite"></p>
+</form>

@@ -1,0 +1,157 @@
+---
+import Base from '../../layouts/Base.astro';
+import ExperienceCard from '../../components/ExperienceCard.astro';
+import { experiences, ars, hasRange, isPurchasable, priceLabel, type Experience } from '../../data/experiences';
+import { INTEGRATIONS, SITE, u, wa } from '../../config';
+
+export function getStaticPaths() {
+  return experiences.map((e) => ({ params: { slug: e.slug }, props: { e } }));
+}
+const { e } = Astro.props as { e: Experience };
+const others = experiences.filter((x) => x.slug !== e.slug).slice(0, 3);
+const buyable = isPurchasable(e);
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: e.name,
+  category: 'Experiencia de Spa',
+  image: e.images.map((i) => new URL(u(`images/${i}`), Astro.site)),
+  brand: { '@type': 'Brand', name: SITE.name },
+  offers: hasRange(e)
+    ? { '@type': 'AggregateOffer', priceCurrency: 'ARS', lowPrice: e.price, highPrice: e.priceMax }
+    : { '@type': 'Offer', priceCurrency: 'ARS', price: e.price, url: new URL(Astro.url.pathname, Astro.site) },
+};
+const details: [string, string | string[] | undefined][] = [
+  ['Descripción', e.description],
+  ['Qué incluye', e.includes],
+  ['Duración', e.duration],
+  ['Personas', e.people],
+  ['Condiciones', e.conditions],
+];
+---
+<Base title={`${e.name} — Experiencia de Spa`} description={`${e.name}: experiencia de Spa en Blank Hotel Recoleta, Buenos Aires. ${hasRange(e) ? 'Desde ' : ''}${priceLabel(e)}.`} solid image={e.images[0]} jsonld={jsonld}>
+  <div class="wrap prod">
+    <div data-gallery data-reveal>
+      <div class="gal" style="height:clamp(380px,52vw,700px)">
+        {e.images.map((img, k) => <div class:list={['gal__s', { 'is-on': k === 0 }]}><img src={u(`images/${img}`)} alt={`${e.name} — foto ${k + 1}`} fetchpriority={k === 0 ? 'high' : undefined} loading={k === 0 ? undefined : 'lazy'} /></div>)}
+        <div class="gal__ui">
+          <button type="button" data-prev aria-label="Foto anterior">←</button>
+          <span>01 / {String(e.images.length).padStart(2, '0')}</span>
+          <button type="button" data-next aria-label="Foto siguiente">→</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="prod__txt">
+      <p class="eyebrow" data-reveal><a href={u('experiencias')}>Experiencias</a></p>
+      <h1 class="h1" data-lines>{e.name}</h1>
+      <p class="prod__price" data-reveal><small>{hasRange(e) ? 'Desde — hasta' : 'Precio'}</small><span data-price>{priceLabel(e)}</span></p>
+
+      <form class="form" data-product data-slug={e.slug} data-name={e.name} data-api={INTEGRATIONS.spaAvailabilityApi} data-reveal novalidate>
+        {hasRange(e) && (
+          <div class="field">
+            <label for="px-v">Opción</label>
+            {e.variants.length > 0 ? (
+              <select id="px-v" name="variant" required>
+                {e.variants.map((v) => <option value={v.id} data-price={v.price}>{v.name} — {ars(v.price)}</option>)}
+              </select>
+            ) : (
+              <p class="hint">Esta experiencia tiene distintas opciones entre {ars(e.price)} y {ars(e.priceMax!)}. Consultanos para conocerlas.</p>
+            )}
+          </div>
+        )}
+        <div class="field">
+          <label for="px-d">Fecha</label>
+          <input id="px-d" type="date" name="date" />
+          <span class="err">Elegí una fecha.</span>
+        </div>
+        <div class="field">
+          <label for="px-t">Horario</label>
+          <select id="px-t" name="time" disabled><option value="">Se confirma según disponibilidad</option></select>
+          <span class="hint" data-time-hint>Elegí una fecha para consultar los horarios.</span>
+        </div>
+        <div class="field">
+          <label>Cantidad</label>
+          <div class="qty"><button type="button" data-minus aria-label="Menos">−</button><output name="qty">1</output><button type="button" data-plus aria-label="Más">+</button></div>
+        </div>
+      </form>
+
+      <div class="room__acts" data-reveal>
+        {buyable
+          ? <button class="btn btn--dark" type="button" data-buy><span>Añadir al carrito</span></button>
+          : <a class="btn btn--dark" href={wa(`Hola, quiero consultar por la experiencia "${e.name}" del Spa de Blank Hotel.`)} target="_blank" rel="noopener" data-wa-link data-wa-base={`Hola, quiero consultar por la experiencia "${e.name}" del Spa de Blank Hotel.`}><span>Consultar opciones por WhatsApp</span></a>}
+        <a class="link" href={u('carrito')}>Ver carrito</a>
+      </div>
+
+      {details.some(([, v]) => v && v.length) && (
+        <dl class="dl" data-reveal>
+          {details.filter(([, v]) => v && v.length).map(([k, v]) => (
+            <div><dt>{k}</dt><dd>{Array.isArray(v) ? <ul>{v.map((x) => <li>{x}</li>)}</ul> : v}</dd></div>
+          ))}
+        </dl>
+      )}
+    </div>
+  </div>
+
+  <section class="sec dark">
+    <div class="wrap">
+      <div class="sec-head"><div><p class="eyebrow" data-reveal>También te puede interesar</p><h2 class="h2" data-lines>Más <em>experiencias.</em></h2></div><a class="link" href={u('experiencias')} data-reveal>Ver todas</a></div>
+      <div class="xgrid">{others.map((x, i) => <ExperienceCard e={x} n={i + 1} delay={i * 0.1} />)}</div>
+    </div>
+  </section>
+</Base>
+<script>
+  import { addItem } from '../../scripts/cart';
+  import { getAvailability } from '../../scripts/availability';
+  const nice = (s: string) => s.split('-').reverse().join('/');
+  document.addEventListener('astro:page-load', () => {
+    const f = document.querySelector<HTMLFormElement>('form[data-product]');
+    if (!f || f.dataset.on) return;
+    f.dataset.on = '1';
+    const date = f.querySelector<HTMLInputElement>('[name=date]')!;
+    const time = f.querySelector<HTMLSelectElement>('[name=time]')!;
+    const hint = f.querySelector<HTMLElement>('[data-time-hint]')!;
+    const out = f.querySelector<HTMLOutputElement>('output')!;
+    const variant = f.querySelector<HTMLSelectElement>('[name=variant]');
+    const d = new Date();
+    date.min = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    const params = new URLSearchParams(location.search);
+    if (params.get('fecha')) date.value = params.get('fecha')!;
+    let qty = Math.max(1, Number(params.get('personas')) || 1);
+    const paint = () => (out.value = String(qty));
+    paint();
+    f.querySelector('[data-minus]')!.addEventListener('click', () => { qty = Math.max(1, qty - 1); paint(); });
+    f.querySelector('[data-plus]')!.addEventListener('click', () => { qty = Math.min(20, qty + 1); paint(); });
+    variant?.addEventListener('change', () => {
+      const p = Number(variant.selectedOptions[0].dataset.price);
+      const el = document.querySelector('[data-price]');
+      if (el && p) el.textContent = '$' + p.toLocaleString('es-AR');
+    });
+    const waLink = document.querySelector<HTMLAnchorElement>('[data-wa-link]');
+    const load = async () => {
+      time.innerHTML = '<option value="">Se confirma según disponibilidad</option>';
+      time.disabled = true;
+      if (waLink) waLink.href = `https://wa.me/${waLink.href.split('wa.me/')[1].split('?')[0]}?text=${encodeURIComponent(waLink.dataset.waBase + (date.value ? `\nFecha: ${nice(date.value)}` : ''))}`;
+      if (!date.value) return (hint.textContent = 'Elegí una fecha para consultar los horarios.');
+      hint.textContent = 'Consultando disponibilidad…';
+      const res = await getAvailability(f.dataset.api || '', { slug: f.dataset.slug!, variant: variant?.value, date: date.value, people: qty });
+      if (res.status === 'ok' && res.slots.length) {
+        time.innerHTML = '<option value="">Elegir horario</option>' + res.slots.map((s) => `<option value="${s.time}">${s.time} hs</option>`).join('');
+        time.disabled = false;
+        hint.textContent = 'Horarios disponibles para la fecha elegida.';
+      } else if (res.status === 'ok') hint.textContent = 'No hay horarios disponibles para esa fecha.';
+      else if (res.status === 'error') hint.textContent = 'No pudimos consultar la disponibilidad. Probá de nuevo en unos minutos.';
+      else hint.textContent = 'Tu fecha queda como preferencia: el Spa confirma el horario disponible al coordinar la reserva.';
+    };
+    date.addEventListener('change', load);
+    if (date.value) load();
+    document.querySelector('[data-buy]')?.addEventListener('click', () => {
+      const field = date.closest('.field')!;
+      field.classList.toggle('is-bad', !date.value);
+      if (!date.value) return date.focus();
+      addItem({ slug: f.dataset.slug!, variantId: variant?.value || undefined, qty, date: date.value, time: time.value || undefined });
+      const t = document.querySelector<HTMLElement>('.toast');
+      if (t) { t.querySelector('span')!.textContent = `${f.dataset.name} se añadió al carrito.`; t.classList.add('is-on'); setTimeout(() => t.classList.remove('is-on'), 4200); }
+    });
+  });
+</script>

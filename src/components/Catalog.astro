@@ -1,0 +1,7 @@
+---
+// Catálogo mínimo para el carrito y el checkout (nombres, precios e imagen).
+import { experiences } from '../data/experiences';
+import { u } from '../config';
+const data = Object.fromEntries(experiences.map((e) => [e.slug, { name: e.name, price: e.price, priceMax: e.priceMax ?? null, variants: e.variants, image: u(`images/${e.images[0]}`), url: u(`experiencias/${e.slug}`) }]));
+---
+<script type="application/json" id="catalog" set:html={JSON.stringify(data)} />

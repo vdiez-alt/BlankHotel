@@ -1,0 +1,42 @@
+---
+import { NAV, SITE, INTEGRATIONS, u, wa } from '../config';
+const reserve = INTEGRATIONS.bookingEngineUrl || u('#reservar');
+---
+<footer class="footer dark">
+  <div class="wrap">
+    <div class="footer__top">
+      <div>
+        <a class="footer__logo" href={u('')} aria-label={SITE.name}>
+          <img src={u('images/logo-blank-hotel-recoleta-transparente.png')} alt={SITE.name} width="225" height="225" loading="lazy" />
+        </a>
+        <p class="footer__tag">{SITE.tagline}.</p>
+      </div>
+      <div>
+        <h2>Visitanos</h2>
+        <ul><li>{SITE.address}</li><li>{SITE.district}</li><li>Argentina</li><li><a href={SITE.mapsLink} target="_blank" rel="noopener">Cómo llegar</a></li></ul>
+      </div>
+      <div>
+        <h2>Contacto</h2>
+        <ul>
+          <li><a href={SITE.phoneHref}>Tel. {SITE.phoneLabel}</a></li>
+          <li><a href={wa()} target="_blank" rel="noopener">WhatsApp {SITE.whatsappLabel}</a></li>
+          <li><a href={SITE.instagramHref} target="_blank" rel="noopener">{SITE.instagramLabel}</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Navegación</h2>
+        <ul>{NAV.map((n) => <li><a href={u(n.href)}>{n.label}</a></li>)}</ul>
+      </div>
+      <div>
+        <h2>Reservas</h2>
+        <ul>
+          <li><a href={reserve}>Reservar alojamiento</a></li>
+          <li><a href={u('spa')}>Spa &amp; Wellness</a></li>
+          <li><a href={u('experiencias')}>Experiencias</a></li>
+          <li><a href={u('carrito')}>Carrito</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bot"><span>Blank Hotel Recoleta — Hotel &amp; Spa — Buenos Aires</span><span>© {new Date().getFullYear()}</span></div>
+  </div>
+</footer>

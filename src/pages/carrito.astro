@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import Catalog from '../components/Catalog.astro';
+import { u } from '../config';
+---
+<Base title="Carrito" description="Tu carrito de experiencias del Spa de Blank Hotel Recoleta." solid>
+  <section class="page-top sec" style="padding-bottom:clamp(70px,9vw,130px)">
+    <div class="wrap">
+      <p class="eyebrow">Experiencias</p>
+      <h1 class="h2" style="margin:30px 0 50px">Tu <em>carrito.</em></h1>
+      <div class="cart" data-cart data-checkout={u('checkout')} data-shop={u('experiencias')}>
+        <p>Cargando…</p>
+      </div>
+    </div>
+  </section>
+  <Catalog />
+</Base>
+<script>
+  import { setQty, removeItem, getCart } from '../scripts/cart';
+  import { lines, subtotal, ars } from '../scripts/order';
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  function render() {
+    const root = document.querySelector<HTMLElement>('[data-cart]');
+    if (!root) return;
+    const ls = lines();
+    if (!ls.length) {
+      root.style.display = 'block';
+      root.innerHTML = `<div class="empty"><p class="lead">Tu carrito está vacío.</p><p class="body" style="margin:14px 0 34px">Descubrí las experiencias del Spa y elegí la tuya.</p><a class="btn btn--dark" href="${root.dataset.shop}"><span>Ver experiencias</span></a></div>`;
+      return;
+    }
+    root.style.display = '';
+    const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    root.innerHTML = `
+      <div>
+        ${ls.map((l) => `
+          <article class="citem">
+            <a class="citem__ph media" href="${l.entry.url}"><img src="${l.entry.image}" alt=""></a>
+            <div>
+              <h3><a href="${l.entry.url}">${esc(l.entry.name)}</a></h3>
+              <p class="citem__meta">${l.variantName ? esc(l.variantName) + ' · ' : ''}${ars(l.unit)} c/u${l.item.time ? ' · ' + esc(l.item.time) + ' hs' : ''}</p>
+              <label class="citem__meta" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">Fecha preferida <input type="date" min="${today}" value="${l.item.date || ''}" data-date="${l.index}" style="border:0;border-bottom:1px solid var(--grey);background:none;padding:2px 0"></label>
+              <div class="qty"><button type="button" data-q="${l.index}" data-v="${l.item.qty - 1}" aria-label="Menos">−</button><output>${l.item.qty}</output><button type="button" data-q="${l.index}" data-v="${l.item.qty + 1}" aria-label="Más">+</button></div>
+              <button type="button" class="citem__rm" data-rm="${l.index}">Eliminar</button>
+            </div>
+            <p class="price">${ars(l.total)}</p>
+          </article>`).join('')}
+      </div>
+      <aside class="summary">
+        <p class="cap" style="margin-bottom:14px">Resumen</p>
+        <div class="line"><span>Subtotal</span><span>${ars(subtotal(ls))}</span></div>
+        <div class="line total"><span>Total</span><span>${ars(subtotal(ls))}</span></div>
+        <a class="btn btn--dark" href="${root.dataset.checkout}"><span>Continuar al pago</span></a>
+        <a class="btn" href="${root.dataset.shop}"><span>Seguir mirando</span></a>
+        <small>Precios en pesos argentinos. La fecha y el horario quedan sujetos a la disponibilidad del Spa.</small>
+      </aside>`;
+  }
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const q = t.closest<HTMLElement>('[data-q]');
+    if (q) return setQty(Number(q.dataset.q), Number(q.dataset.v));
+    const rm = t.closest<HTMLElement>('[data-rm]');
+    if (rm) removeItem(Number(rm.dataset.rm));
+  });
+  document.addEventListener('change', (e) => {
+    const t = e.target as HTMLInputElement;
+    if (!t.matches?.('[data-date]')) return;
+    const items = getCart();
+    const i = Number(t.dataset.date);
+    if (items[i]) { items[i].date = t.value || undefined; localStorage.setItem('blank_cart_v1', JSON.stringify(items)); }
+  });
+  document.addEventListener('cart:change', render);
+  document.addEventListener('astro:page-load', render);
+</script>

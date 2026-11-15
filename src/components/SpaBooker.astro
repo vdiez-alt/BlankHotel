@@ -1,0 +1,65 @@
+---
+// Componente "Reservá tu experiencia": elige experiencia, fecha, horario y personas.
+// Los horarios salen únicamente de la API real de disponibilidad.
+import { experiences } from '../data/experiences';
+import { INTEGRATIONS, SITE, u } from '../config';
+---
+<form class="booking booking--flat" data-spa-booker data-api={INTEGRATIONS.spaAvailabilityApi} data-wa={SITE.whatsappNumber} data-base={u('experiencias/')} novalidate style="grid-template-columns:1.4fr 1fr 1fr 1fr minmax(240px,290px)">
+  <div class="booking__f">
+    <label for="sb-x">Experiencia</label>
+    <select id="sb-x" name="exp" required>
+      <option value="">Elegir experiencia</option>
+      {experiences.map((e) => <option value={e.slug}>{e.name}</option>)}
+    </select>
+  </div>
+  <div class="booking__f"><label for="sb-d">Fecha</label><input id="sb-d" type="date" name="date" required /></div>
+  <div class="booking__f">
+    <label for="sb-t">Horario</label>
+    <select id="sb-t" name="time" disabled><option value="">Según fecha</option></select>
+  </div>
+  <div class="booking__f">
+    <label for="sb-p">Personas</label>
+    <select id="sb-p" name="people">{[1, 2, 3, 4, 5, 6].map((n) => <option value={n} selected={n === 2}>{n} {n === 1 ? 'persona' : 'personas'}</option>)}</select>
+  </div>
+  <button class="booking__go" type="submit">Consultar disponibilidad <i aria-hidden="true">→</i></button>
+  <p class="booking__msg" role="status" aria-live="polite"></p>
+</form>
+<script>
+  import { getAvailability } from '../scripts/availability';
+  const nice = (s: string) => s.split('-').reverse().join('/');
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLFormElement>('form[data-spa-booker]').forEach((f) => {
+      if (f.dataset.on) return;
+      f.dataset.on = '1';
+      const exp = f.querySelector<HTMLSelectElement>('[name=exp]')!;
+      const date = f.querySelector<HTMLInputElement>('[name=date]')!;
+      const time = f.querySelector<HTMLSelectElement>('[name=time]')!;
+      const people = f.querySelector<HTMLSelectElement>('[name=people]')!;
+      const msg = f.querySelector<HTMLElement>('.booking__msg')!;
+      const d = new Date();
+      date.min = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+      const say = (html: string) => { msg.innerHTML = html; msg.classList.add('is-open'); };
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!exp.value) return say('Elegí una experiencia para continuar.');
+        if (!date.value) return say('Elegí una fecha para consultar la disponibilidad.');
+        const name = exp.selectedOptions[0].textContent;
+        if (time.value) { window.location.href = `${f.dataset.base}${exp.value}?fecha=${date.value}&hora=${time.value}&personas=${people.value}`; return; }
+        say('Consultando disponibilidad…');
+        const res = await getAvailability(f.dataset.api || '', { slug: exp.value, date: date.value, people: Number(people.value) });
+        if (res.status === 'ok') {
+          if (!res.slots.length) return say('No hay horarios disponibles para esa fecha. Probá con otro día.');
+          time.innerHTML = '<option value="">Elegir horario</option>' + res.slots.map((s) => `<option value="${s.time}">${s.time} hs</option>`).join('');
+          time.disabled = false;
+          return say('Elegí un horario disponible y continuá a la compra.');
+        }
+        const text = `Hola, quiero consultar disponibilidad en el Spa de Blank Hotel.\nExperiencia: ${name}\nFecha: ${nice(date.value)}\nPersonas: ${people.value}`;
+        const link = `<a href="https://wa.me/${f.dataset.wa}?text=${encodeURIComponent(text)}" target="_blank" rel="noopener">consultá esta fecha por WhatsApp</a>`;
+        say(res.status === 'error'
+          ? `No pudimos consultar la disponibilidad en este momento. Probá de nuevo o ${link}.`
+          : `La consulta de horarios online estará disponible próximamente. Mientras tanto, ${link} o <a href="${f.dataset.base}${exp.value}">mirá la experiencia</a>.`);
+      });
+      [exp, date, people].forEach((el) => el.addEventListener('change', () => { time.innerHTML = '<option value="">Según fecha</option>'; time.disabled = true; msg.classList.remove('is-open'); }));
+    });
+  });
+</script>

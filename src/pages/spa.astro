@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import ExperienceCard from '../components/ExperienceCard.astro';
+import SpaBooker from '../components/SpaBooker.astro';
+import { experiences, spaServices } from '../data/experiences';
+import { u, wa } from '../config';
+---
+<Base title="Spa & Wellness" description="Spa en Recoleta, Buenos Aires: circuito de relax, sauna, sala de vapor, hidromasaje y masajes. Experiencias y Spa Day para huéspedes y visitantes." image="spa-hidro.jpg">
+  <section class="hero hero--spa">
+    <div class="hero__bg"><img src={u('images/spa-hidro.jpg')} alt="Hidromasaje del Spa de Blank Hotel Recoleta" fetchpriority="high" data-parallax="-0.18" style="object-position:50% 70%" /></div>
+    <div class="hero__scrim"></div>
+    <div class="scroll-ind" aria-hidden="true">SCROLL</div>
+    <div class="hero__content" style="padding-bottom:clamp(60px,10vh,100px)">
+      <h1 class="h1" data-lines>Make room<br /><em>for yourself.</em></h1>
+      <div class="hero__intro" data-reveal style="--d:.6s">
+        <p>Una experiencia de bienestar en el corazón de Recoleta, para huéspedes y no huéspedes.</p>
+        <a class="btn btn--solid on-photo" href="#experiencias"><span>Ver experiencias</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap split split--wide-l">
+      <div>
+        <p class="eyebrow" data-reveal>El Spa</p>
+        <h2 class="h2" data-lines>Un lugar para<br /><em>bajar el ritmo.</em></h2>
+        <ul class="rows rows--big" data-reveal>
+          {spaServices.map((s, i) => <li><b>{s}</b><i>{String(i + 1).padStart(2, '0')}</i></li>)}
+        </ul>
+        <p style="font-size:13px;color:var(--grey)" data-reveal>Los servicios incluidos varían según la experiencia elegida.</p>
+      </div>
+      <div class="duo duo--r">
+        <div class="duo__a media" data-reveal="img"><div class="par"><img src={u('images/spa-vertical.jpg')} alt="Circuito de aguas del Spa" loading="lazy" data-parallax="0.09" /></div></div>
+        <div class="duo__b media" data-reveal="img" style="--d:.2s;height:44%"><img src={u('images/spa-sauna-2.jpg')} alt="Sauna del Spa" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec dark" id="experiencias" style="scroll-margin-top:60px">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow" data-reveal>Experiencias</p><h2 class="h2" data-lines>Elegí tu<br /><em>experiencia.</em></h2></div>
+        <p class="body dark" style="max-width:330px;background:none" data-reveal>Seis propuestas para disfrutar del Spa. Comprá online y coordiná tu fecha y horario.</p>
+      </div>
+      <div class="xgrid">
+        {experiences.map((e, i) => <ExperienceCard e={e} n={i + 1} delay={(i % 3) * 0.1} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec stone" id="reservar-spa">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><p class="eyebrow" data-reveal>Reservá tu experiencia</p><h2 class="h2" data-lines>Tu momento,<br /><em>a tu tiempo.</em></h2></div>
+        <p class="steps" data-reveal><span class="is-on">1 Experiencia</span><span>2 Fecha</span><span>3 Horario</span><span>4 Personas</span></p>
+      </div>
+      <div data-reveal><SpaBooker /></div>
+      <p style="margin-top:20px;font-size:13px;color:var(--earth)" data-reveal>Los horarios se muestran según la disponibilidad real de la fecha elegida.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap split split--wide-r">
+      <div class="media tall" data-reveal="img"><div class="par"><img src={u('images/spa-masajes.jpg')} alt="Sala de masajes del Spa" loading="lazy" data-parallax="0.09" /></div></div>
+      <div>
+        <p class="eyebrow" data-reveal>Tratamientos</p>
+        <h2 class="h2" data-lines>Masajes y<br /><em>tratamientos.</em></h2>
+        <p class="body" data-reveal>Un espacio reservado para el cuidado personal, dentro del Spa de Blank Hotel.</p>
+        <ul class="rows" data-reveal><li><b>Menú de tratamientos</b><span>Próximamente</span></li></ul>
+        <a class="link" href={wa('Hola, quiero consultar por los masajes y tratamientos del Spa de Blank Hotel.')} target="_blank" rel="noopener" data-reveal>Consultar por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bleed">
+    <div class="bleed__bg"><img src={u('images/spa-tragos.jpg')} alt="Tragos junto al hidromasaje del Spa" loading="lazy" data-parallax="0.12" /></div>
+    <div class="bleed__scrim"></div>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Huéspedes y visitantes</p>
+      <h2 class="h2" data-lines>No hace falta alojarte<br />para <em>disfrutarlo.</em></h2>
+      <p data-reveal>El Spa está abierto tanto a quienes se hospedan en el hotel como a quienes nos visitan por el día.</p>
+      <a class="btn btn--solid" href={u('experiencias')} data-reveal><span>Encontrá tu experiencia</span></a>
+    </div>
+  </section>
+</Base>

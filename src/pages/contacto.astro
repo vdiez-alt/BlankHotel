@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, INTEGRATIONS, u, wa } from '../config';
+const reserve = INTEGRATIONS.bookingEngineUrl || u('#reservar');
+---
+<Base title="Contacto" description="Contactá a Blank Hotel Recoleta: Peña 2049, Recoleta, CABA. Teléfono 4800-1992, WhatsApp 11 6155-4966." solid>
+  <section class="page-top sec" style="padding-bottom:clamp(70px,9vw,120px)">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal>Contacto</p>
+      <h1 class="h1" data-lines style="margin:30px 0 clamp(50px,7vw,90px);font-size:clamp(54px,9vw,120px)">Hablemos.</h1>
+      <div class="split" style="align-items:start">
+        <div data-reveal>
+          <div class="contact-list">
+            <a href={SITE.mapsLink} target="_blank" rel="noopener"><span>Dirección</span><b>{SITE.address}, {SITE.district}</b></a>
+            <a href={SITE.phoneHref}><span>Teléfono</span><b>{SITE.phoneLabel}</b></a>
+            <a href={wa()} target="_blank" rel="noopener"><span>WhatsApp</span><b>{SITE.whatsappLabel}</b></a>
+            <a href={SITE.instagramHref} target="_blank" rel="noopener"><span>Instagram</span><b>{SITE.instagramLabel}</b></a>
+          </div>
+          <div class="room__acts" style="margin-top:40px">
+            <a class="btn btn--dark" href={reserve}><span>Reservar alojamiento</span></a>
+            <a class="btn" href={u('spa')}><span>Spa &amp; Wellness</span></a>
+          </div>
+        </div>
+        <form data-contact data-wa={SITE.whatsappNumber} novalidate data-reveal style="--d:.15s">
+          <p class="cap">Escribinos</p>
+          <div class="form" style="margin-top:18px">
+            <div class="field"><label for="ct-n">Nombre</label><input id="ct-n" name="nombre" autocomplete="name" required /><span class="err">Ingresá tu nombre.</span></div>
+            <div class="field">
+              <label for="ct-m">Motivo</label>
+              <select id="ct-m" name="motivo"><option>Alojamiento</option><option>Spa &amp; Wellness</option><option>Experiencias</option><option>Otra consulta</option></select>
+            </div>
+            <div class="field"><label for="ct-t">Mensaje</label><textarea id="ct-t" name="mensaje" required maxlength="800"></textarea><span class="err">Contanos en qué podemos ayudarte.</span></div>
+          </div>
+          <button class="btn btn--dark" type="submit"><span>Enviar por WhatsApp</span></button>
+          <p style="font-size:12.5px;color:var(--grey);margin-top:16px">Al enviar se abre WhatsApp con tu mensaje listo para mandar.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+  <div class="map"><iframe src={SITE.mapsEmbed} title="Mapa: Blank Hotel Recoleta, Peña 2049" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+</Base>
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const f = document.querySelector<HTMLFormElement>('form[data-contact]');
+    if (!f || f.dataset.on) return;
+    f.dataset.on = '1';
+    f.addEventListener('input', (e) => (e.target as HTMLElement).closest('.field')?.classList.remove('is-bad'));
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let ok = true;
+      f.querySelectorAll<HTMLInputElement>('[required]').forEach((i) => {
+        const bad = !i.value.trim();
+        i.closest('.field')!.classList.toggle('is-bad', bad);
+        if (bad && ok) i.focus();
+        if (bad) ok = false;
+      });
+      if (!ok) return;
+      const d = Object.fromEntries(new FormData(f).entries()) as Record<string, string>;
+      const text = `Hola, soy ${d.nombre}.\nMotivo: ${d.motivo}\n\n${d.mensaje}`;
+      window.open(`https://wa.me/${f.dataset.wa}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+    });
+  });
+</script>
