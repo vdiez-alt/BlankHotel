@@ -4,7 +4,7 @@
 import { experiences } from '../data/experiences';
 import { INTEGRATIONS, SITE, u } from '../config';
 ---
-<form class="booking booking--flat" data-spa-booker data-api={INTEGRATIONS.spaAvailabilityApi} data-wa={SITE.whatsappNumber} data-base={u('experiencias/')} novalidate style="grid-template-columns:1.4fr 1fr 1fr 1fr minmax(240px,290px)">
+<form class="booking booking--flat booking--spa" data-spa-booker data-api={INTEGRATIONS.spaAvailabilityApi} data-wa={SITE.whatsappNumber} data-base={u('experiencias/')} novalidate>
   <div class="booking__f">
     <label for="sb-x">Experiencia</label>
     <select id="sb-x" name="exp" required>
