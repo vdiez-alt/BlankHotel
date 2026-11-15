@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Blank Hotel Recoleta — Mockup Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mock.css">
+<style>
+/* hotel intro */
+.intro-sec{padding:190px 0 170px}
+.intro-sec .grid{display:grid;grid-template-columns:580px 1fr;gap:90px;align-items:start}
+.intro-sec .pics{position:relative;height:880px}
+.intro-sec .p1{position:absolute;left:0;top:0;width:480px;height:720px}
+.intro-sec .p2{position:absolute;right:0;bottom:30px;width:330px;height:240px;border:14px solid var(--white)}
+.intro-sec .num{position:absolute;right:20px;top:0;font-family:'Cormorant Garamond',serif;font-size:140px;line-height:.8;color:var(--stone);font-weight:300}
+.intro-sec h2{margin:34px 0 34px}
+.feat{margin:52px 0 52px;border-top:1px solid var(--stone)}
+.feat div{display:flex;justify-content:space-between;align-items:baseline;padding:19px 0;border-bottom:1px solid var(--stone)}
+.feat b{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:24px}
+.feat span{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);font-weight:400}
+
+/* rooms */
+.rooms{background:var(--black);color:var(--white);padding:160px 0 150px}
+.rooms .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:90px}
+.rooms h2{margin-top:34px}
+.rooms .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.rooms .card:nth-child(even){margin-top:70px}
+.rooms .ph{height:380px;position:relative;overflow:hidden}
+.rooms .ph .m2{position:absolute;left:0;bottom:0;background:var(--white);color:var(--black);font-size:11px;letter-spacing:.2em;padding:10px 14px;font-weight:400}
+.rooms .idx{font-size:10px;letter-spacing:.3em;color:var(--grey);margin:26px 0 10px}
+.rooms h3{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:33px;line-height:1.05;min-height:70px}
+.rooms .dif{font-size:14.5px;line-height:1.6;color:#b9b2a7;margin:12px 0 26px;min-height:46px}
+.rooms .act{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(244,240,233,.18);padding-top:20px}
+.rooms .act .btn{height:40px;padding:0 20px;font-size:10px}
+.rooms .act .link{font-size:10px;border:0;padding:0}
+.rooms .info{margin-top:100px;display:flex;justify-content:center;gap:60px;font-size:11px;letter-spacing:.3em;color:var(--grey);text-transform:uppercase}
+.rooms .info b{color:var(--white);font-weight:400}
+
+/* spa */
+.spa{background:var(--graphite);color:var(--white);padding:150px 0 130px;position:relative;overflow:hidden}
+.spa .eyebrow{justify-content:center;color:var(--stone)}
+.spa .eyebrow:after{content:"";width:40px;height:1px;background:currentColor}
+.spa h2{font-size:176px;line-height:.9;width:1200px;margin:50px auto -84px;position:relative;z-index:2;letter-spacing:-.03em}
+.spa h2 em{display:block;text-align:right}
+.spa .pano{height:560px;margin:0 56px;position:relative}
+.spa .pano:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(36,35,33,.55),rgba(36,35,33,0) 45%)}
+.spa .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:80px;align-items:center;margin-top:80px}
+.spa .big{font-family:'Cormorant Garamond',serif;font-size:35px;line-height:1.2;font-weight:300;grid-column:span 2;padding-right:90px}
+.spa .side{display:flex;flex-direction:column;gap:26px;align-items:flex-start}
+.spa .side small{font-size:11px;letter-spacing:.3em;color:var(--grey);text-transform:uppercase}
+
+/* experiences */
+.exp{background:var(--stone);padding:160px 0 160px;overflow:hidden}
+.exp .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:80px}
+.exp .eyebrow{color:var(--earth)}
+.exp h2{margin-top:34px}
+.arrows{display:flex;gap:12px;align-items:center}
+.arrows span{width:56px;height:56px;border:1px solid var(--black);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px}
+.arrows span:first-child{opacity:.35}
+.arrows em{font-style:normal;font-size:11px;letter-spacing:.3em;margin-right:18px}
+.track{display:flex;gap:28px;margin-left:120px;width:2400px}
+.xcard{width:340px;flex:none}
+.xcard .ph{height:430px;position:relative}
+.xcard .n{font-size:10px;letter-spacing:.3em;color:var(--earth);margin:24px 0 8px}
+.xcard h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:32px;line-height:1.1}
+.xcard .foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:20px;padding-top:18px;border-top:1px solid rgba(16,16,15,.22)}
+.xcard .price{font-size:15px;font-weight:400}
+.xcard .price small{display:block;font-size:10px;letter-spacing:.24em;color:var(--earth);text-transform:uppercase;margin-bottom:4px}
+.xcard .cta{font-size:10px;letter-spacing:.26em;font-weight:400;border-bottom:1px solid;padding-bottom:5px}
+.bar{margin:70px 120px 0;height:1px;background:rgba(16,16,15,.2);position:relative}
+.bar:after{content:"";position:absolute;left:0;top:-1px;height:3px;width:420px;background:var(--black)}
+
+/* location */
+.loc{padding:170px 0}
+.loc .grid{display:grid;grid-template-columns:1fr 600px;gap:90px;align-items:center}
+.loc h2{margin:34px 0}
+.loc .addr{font-family:'Cormorant Garamond',serif;font-size:30px;margin:44px 0 10px}
+.loc .near{margin:40px 0 50px;border-top:1px solid var(--stone)}
+.loc .near div{padding:17px 0;border-bottom:1px solid var(--stone);display:flex;gap:26px;font-size:16px;align-items:baseline}
+.loc .near i{font-style:normal;font-size:10px;letter-spacing:.3em;color:var(--grey)}
+.slot{height:720px;background:var(--stone);position:relative;display:flex;align-items:center;justify-content:center;background-image:repeating-linear-gradient(135deg,rgba(16,16,15,.035) 0 1px,transparent 1px 22px)}
+.slot .lbl{border:1px solid var(--grey);padding:26px 34px;text-align:center;font-size:10px;letter-spacing:.3em;color:var(--earth);line-height:2.2;text-transform:uppercase;background:var(--stone)}
+.slot b{display:block;font-family:'Cormorant Garamond',serif;font-size:26px;letter-spacing:0;text-transform:none;font-weight:400;color:var(--black)}
+.pin{position:absolute;left:-60px;bottom:70px;background:var(--black);color:var(--white);padding:30px 34px;width:270px}
+.pin small{font-size:10px;letter-spacing:.3em;color:var(--grey)}
+.pin p{font-family:'Cormorant Garamond',serif;font-size:27px;line-height:1.15;margin-top:10px}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="bg"><img src="../blank-hotel-recoleta.jpg" style="object-position:50% 38%"></div>
+  <div class="scrim"></div>
+  <header>
+    <div class="logo"><img src="../public/images/logo-blank-hotel-recoleta-transparente.png"></div>
+    <nav><span>HOTEL</span><span>HABITACIONES</span><span>SPA</span><span>UBICACIÓN</span><span>CONTACTO</span></nav>
+    <div class="hright">
+      <span class="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>0</span>
+      <span class="btn solid">Reservar</span>
+    </div>
+  </header>
+  <div class="scroll">SCROLL</div>
+  <div class="content">
+    <h1>Una experiencia<span><em>única</em> en Recoleta.</span></h1>
+    <div class="intro">
+      <div class="eyebrow">Hotel &amp; Spa</div>
+      Hotel &amp; Spa en el corazón de Buenos Aires, donde el diseño, el confort y el bienestar se encuentran.
+    </div>
+  </div>
+</section>
+
+<div class="booking">
+  <div class="f"><label>Check-in</label><div class="v">Elegir fecha <i>▾</i></div></div>
+  <div class="f"><label>Check-out</label><div class="v">Elegir fecha <i>▾</i></div></div>
+  <div class="f"><label>Huéspedes</label><div class="v">2 adultos <i>▾</i></div></div>
+  <div class="f"><label>Habitaciones</label><div class="v">1 habitación <i>▾</i></div></div>
+  <div class="go">BUSCAR DISPONIBILIDAD <span>→</span></div>
+</div>
+
+<section class="intro-sec">
+  <div class="wrap grid">
+    <div class="pics">
+      <div class="p1"><img src="../blank-hotel-recoleta%20(1).jpg" style="object-position:62% 50%"></div>
+      <div class="p2"><img src="../453519066.jpg"></div>
+    </div>
+    <div>
+      <div class="eyebrow">El hotel</div>
+      <h2 style="font-size:70px">Un refugio urbano<br>en el corazón<br>de <em>Recoleta.</em></h2>
+      <p class="body" style="width:440px">Un hotel de cuatro estrellas en uno de los barrios más elegantes de Buenos Aires. Habitaciones amplias, desayuno incluido y un Spa para hacer una pausa en medio de la ciudad.</p>
+      <div class="feat">
+        <div><b>Ubicación privilegiada</b><span>Peña 2049, Recoleta</span></div>
+        <div><b>Habitaciones amplias</b><span>De 26 a 62 m²</span></div>
+        <div><b>Desayuno incluido</b><span>Boutique Café</span></div>
+        <div><b>Confort y privacidad</b><span>Habitaciones insonorizadas</span></div>
+        <div><b>Atención y servicios</b><span>Recepción 24 horas</span></div>
+      </div>
+      <span class="link">Conocer el hotel</span>
+    </div>
+  </div>
+</section>
+
+<section class="rooms dark">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="eyebrow">Habitaciones</div><h2>Espacios pensados<br>para <em>quedarse.</em></h2></div>
+      <span class="link">Ver todas las habitaciones</span>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="ph"><img src="../689505570.jpg"><span class="m2">34 M²</span></div><div class="idx">01 — DOS CAMAS QUEEN SIZE</div><h3>Deluxe Queen</h3><p class="dif">Ideal para una estadía en familia en Recoleta.</p><div class="act"><span class="link">Conocer</span><span class="btn">Reservar</span></div></div>
+      <div class="card"><div class="ph"><img src="../746327713.jpg" style="object-position:30% 50%"><span class="m2">37 M²</span></div><div class="idx">02 — UNA CAMA KING SIZE</div><h3>Grand Deluxe King</h3><p class="dif">Con hidromasaje y sofá de lectura.</p><div class="act"><span class="link">Conocer</span><span class="btn">Reservar</span></div></div>
+      <div class="card"><div class="ph"><img src="../500534357.jpg"><span class="m2">26 M² + 6 M² BALCÓN</span></div><div class="idx">03 — UNA CAMA KING SIZE</div><h3>Balcony Junior</h3><p class="dif">Balcón privado con vista al barrio de Recoleta.</p><div class="act"><span class="link">Conocer</span><span class="btn">Reservar</span></div></div>
+      <div class="card"><div class="ph"><img src="../453517620.jpg"><span class="m2">62 M²</span></div><div class="idx">04 — UNA CAMA KING SIZE</div><h3>Suite Ejecutiva Buenos Aires</h3><p class="dif">Dos ambientes y balcón privado aterrazado.</p><div class="act"><span class="link">Conocer</span><span class="btn">Reservar</span></div></div>
+    </div>
+    <div class="info"><span>Check-in <b>15:00 hs</b></span><span>Check-out <b>12:00 hs</b></span><span><b>Desayuno incluido</b></span></div>
+  </div>
+</section>
+
+<section class="spa dark">
+  <div class="eyebrow">Spa &amp; Wellness</div>
+  <h2>Make room<em>for yourself.</em></h2>
+  <div class="pano"><img src="../1120x354%20(1).webp" style="object-position:50% 60%"></div>
+  <div class="wrap row">
+    <p class="big">Una experiencia de bienestar que también podés disfrutar <em>sin alojarte en el hotel.</em></p>
+    <div class="side"><small>Abierto a huéspedes y visitantes</small><span class="btn solid">Descubrir el Spa</span></div>
+  </div>
+</section>
+
+<section class="exp">
+  <div class="wrap head">
+    <div><div class="eyebrow">Experiencias</div><h2>Regalate <em>una pausa.</em></h2></div>
+    <div class="arrows"><em>01 / 06</em><span>←</span><span>→</span></div>
+  </div>
+  <div class="track">
+    <div class="xcard"><div class="ph"><img src="../586254860.jpg"></div><div class="n">01</div><h3>Té de la tarde</h3><div class="foot"><div class="price"><small>Precio</small>$50.000</div><span class="cta">AÑADIR AL CARRITO</span></div></div>
+    <div class="xcard"><div class="ph"><img src="../689506194.jpg"></div><div class="n">02</div><h3>Desconectate</h3><div class="foot"><div class="price"><small>Desde</small>$120.000 — $330.000</div><span class="cta">VER PRODUCTO</span></div></div>
+    <div class="xcard"><div class="ph"><img src="../blank-hotel-recoleta%20(2).jpg" style="object-position:80% 50%"></div><div class="n">03</div><h3>Noche Romántica para 2</h3><div class="foot"><div class="price"><small>Precio</small>$290.000</div><span class="cta">AÑADIR AL CARRITO</span></div></div>
+    <div class="xcard"><div class="ph"><img src="../blank-hotel-recoleta%20(4).jpg" style="object-position:35% 50%"></div><div class="n">04</div><h3>Escapada Blank</h3><div class="foot"><div class="price"><small>Desde</small>$250.000 — $350.000</div><span class="cta">VER PRODUCTO</span></div></div>
+    <div class="xcard"><div class="ph"><img src="../383097607.jpg"></div><div class="n">05</div><h3>Spa Day Mujeres</h3><div class="foot"><div class="price"><small>Desde</small>$110.000 — $160.000</div><span class="cta">VER PRODUCTO</span></div></div>
+    <div class="xcard"><div class="ph"><img src="../208853353.jpg"></div><div class="n">06</div><h3>Spa Day</h3><div class="foot"><div class="price"><small>Desde</small>$110.000 — $320.000</div><span class="cta">VER PRODUCTO</span></div></div>
+  </div>
+  <div class="bar"></div>
+</section>
+
+<section class="loc">
+  <div class="wrap grid">
+    <div>
+      <div class="eyebrow">Ubicación</div>
+      <h2 style="font-size:66px">Recoleta también<br>es parte de<br><em>la experiencia.</em></h2>
+      <p class="body" style="width:430px">A pasos de los principales atractivos culturales y comerciales del barrio.</p>
+      <div class="near">
+        <div><i>01</i>Ateneo Grand Splendid</div>
+        <div><i>02</i>Shopping Patio Bullrich</div>
+        <div><i>03</i>Parque 3 de Febrero</div>
+      </div>
+      <span class="link">Descubrir la ubicación</span>
+    </div>
+    <div class="slot">
+      <div class="lbl"><b>Fotografía de Recoleta</b>Espacio reservado · material pendiente</div>
+      <div class="pin"><small>DIRECCIÓN</small><p>Peña 2049<br>Recoleta, CABA</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="top">
+      <div><div class="flogo"><img src="../public/images/logo-blank-hotel-recoleta-transparente.png"></div><p class="tag">Hotel &amp; Spa en el corazón de Buenos Aires.</p></div>
+      <div><h5>Visitanos</h5><ul><li>Peña 2049</li><li>Recoleta, CABA</li><li>Argentina</li></ul></div>
+      <div><h5>Contacto</h5><ul><li>Tel. 4800-1992</li><li>WhatsApp 11 6155-4966</li><li>@blankhotelrecoleta</li></ul></div>
+      <div><h5>Navegación</h5><ul><li>Hotel</li><li>Habitaciones</li><li>Spa</li><li>Ubicación</li><li>Contacto</li></ul></div>
+      <div><h5>Reservas</h5><ul><li>Reservar alojamiento</li><li>Spa &amp; Wellness</li><li>Experiencias</li></ul></div>
+    </div>
+    <div class="bot"><span>BLANK HOTEL RECOLETA — HOTEL &amp; SPA — BUENOS AIRES</span><span>© 2026</span></div>
+  </div>
+</footer>
+</body>
+</html>

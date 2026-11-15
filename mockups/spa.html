@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Blank Hotel Recoleta — Mockup Spa</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="mock.css">
+<style>
+.hero{height:900px}
+.hero .content{bottom:90px;align-items:flex-end}
+.hero h1{font-size:168px;line-height:.86;letter-spacing:-.03em}
+.hero h1 span{padding-left:210px}
+.crumb{position:absolute;left:56px;top:170px;font-size:10px;letter-spacing:.32em;color:var(--stone)}
+
+/* services */
+.serv{padding:170px 0 160px}
+.serv .grid{display:grid;grid-template-columns:1fr 520px;gap:100px}
+.serv h2{margin:34px 0 70px}
+.serv .row{display:grid;grid-template-columns:70px 1fr auto;align-items:baseline;padding:26px 0;border-top:1px solid var(--stone)}
+.serv .row:last-of-type{border-bottom:1px solid var(--stone)}
+.serv .row i{font-style:normal;font-size:10px;letter-spacing:.3em;color:var(--grey)}
+.serv .row b{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:50px;line-height:1}
+.serv .row span{font-size:18px;color:var(--grey)}
+.serv .note{font-size:13px;color:var(--grey);margin-top:28px;line-height:1.6}
+.serv .pics{position:relative;height:820px}
+.serv .a{position:absolute;right:0;top:0;width:420px;height:560px}
+.serv .b{position:absolute;left:0;bottom:0;width:300px;height:380px;border:14px solid var(--white)}
+
+/* experiences */
+.xp{background:var(--black);color:var(--white);padding:160px 0}
+.xp .head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:90px}
+.xp h2{margin-top:34px}
+.xp .intro{width:330px;font-size:16px;line-height:1.7;color:#b9b2a7}
+.xp .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:70px 32px}
+.xp .card:nth-child(3n+2){margin-top:70px}
+.xp .ph{height:470px;position:relative;overflow:hidden}
+.xp .ph span{position:absolute;left:18px;top:18px;font-size:10px;letter-spacing:.3em}
+.xp h3{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:38px;margin:26px 0 18px}
+.xp .foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(244,240,233,.18);padding-top:20px}
+.xp .price{font-size:16px;font-weight:400}
+.xp .price small{display:block;font-size:10px;letter-spacing:.24em;color:var(--grey);text-transform:uppercase;margin-bottom:5px}
+.xp .btn{height:40px;padding:0 20px;font-size:10px}
+
+/* booking widget */
+.res{background:var(--stone);padding:150px 0}
+.res .top{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:end;margin-bottom:70px}
+.res .eyebrow{color:var(--earth)}
+.res h2{margin-top:34px}
+.res .steps{display:flex;gap:34px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--earth);justify-content:flex-end;padding-bottom:12px}
+.res .steps b{font-weight:400;color:var(--black);border-bottom:1px solid;padding-bottom:6px}
+.res .booking{margin:0;width:100%;grid-template-columns:1.4fr 1fr 1fr 1fr 290px;box-shadow:none}
+.res .muted{color:var(--grey)}
+.res .hint{margin-top:22px;font-size:13px;color:var(--earth)}
+
+/* treatments */
+.treat{padding:170px 0}
+.treat .grid{display:grid;grid-template-columns:520px 1fr;gap:120px;align-items:center}
+.treat .ph{height:680px}
+.treat h2{margin:34px 0}
+.treat .soon{margin:46px 0;border:1px solid var(--stone);padding:30px 34px;display:flex;justify-content:space-between;align-items:center}
+.treat .soon b{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:400}
+.treat .soon span{font-size:10px;letter-spacing:.3em;color:var(--grey);text-transform:uppercase}
+
+/* visitors */
+.vis{position:relative;height:760px;color:var(--white);background:var(--black)}
+.vis .bg{position:absolute;inset:0}
+.vis .scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,16,15,.86) 0%,rgba(16,16,15,.55) 45%,rgba(16,16,15,.05) 100%)}
+.vis .wrap{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.vis .eyebrow{color:var(--stone)}
+.vis h2{font-size:96px;margin:36px 0 34px}
+.vis p{font-size:17px;line-height:1.7;width:420px;color:#e6e0d6;margin-bottom:46px}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="bg"><img src="../590474816.jpg" style="object-position:50% 70%"></div>
+  <div class="scrim"></div>
+  <header>
+    <div class="logo"><img src="../public/images/logo-blank-hotel-recoleta-transparente.png"></div>
+    <nav><span>HOTEL</span><span>HABITACIONES</span><span class="on">SPA</span><span>UBICACIÓN</span><span>CONTACTO</span></nav>
+    <div class="hright">
+      <span class="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>0</span>
+      <span class="btn solid">Reservar</span>
+    </div>
+  </header>
+
+  <div class="scroll">SCROLL</div>
+  <div class="content">
+    <h1>Make room<span><em>for yourself.</em></span></h1>
+    <div class="intro">
+      Una experiencia de bienestar en el corazón de Recoleta, para huéspedes y no huéspedes.
+      <div style="margin-top:30px"><span class="btn solid">Ver experiencias</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="serv">
+  <div class="wrap grid">
+    <div>
+      <div class="eyebrow">El Spa</div>
+      <h2>Un lugar para<br><em>bajar el ritmo.</em></h2>
+      <div class="row"><i>01</i><b>Circuito de relax</b><span>→</span></div>
+      <div class="row"><i>02</i><b>Sauna</b><span>→</span></div>
+      <div class="row"><i>03</i><b>Sala de vapor</b><span>→</span></div>
+      <div class="row"><i>04</i><b>Hidromasaje</b><span>→</span></div>
+      <div class="row"><i>05</i><b>Masajes</b><span>→</span></div>
+      <p class="note">Los servicios incluidos varían según la experiencia elegida.</p>
+    </div>
+    <div class="pics">
+      <div class="a"><img src="../383097692.jpg"></div>
+      <div class="b"><img src="../689506338.jpg"></div>
+    </div>
+  </div>
+</section>
+
+<section class="xp dark">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="eyebrow">Experiencias</div><h2>Elegí tu<br><em>experiencia.</em></h2></div>
+      <p class="intro">Seis propuestas para disfrutar del Spa. Comprá online y reservá tu fecha y horario.</p>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="ph"><img src="../586254860.jpg"><span>01</span></div><h3>Té de la tarde</h3><div class="foot"><div class="price"><small>Precio</small>$50.000</div><span class="btn">Añadir al carrito</span></div></div>
+      <div class="card"><div class="ph"><img src="../689506194.jpg"><span>02</span></div><h3>Desconectate</h3><div class="foot"><div class="price"><small>Desde</small>$120.000 — $330.000</div><span class="btn">Ver producto</span></div></div>
+      <div class="card"><div class="ph"><img src="../blank-hotel-recoleta%20(2).jpg" style="object-position:80% 50%"><span>03</span></div><h3>Noche Romántica para 2</h3><div class="foot"><div class="price"><small>Precio</small>$290.000</div><span class="btn">Añadir al carrito</span></div></div>
+      <div class="card"><div class="ph"><img src="../blank-hotel-recoleta%20(4).jpg" style="object-position:35% 50%"><span>04</span></div><h3>Escapada Blank</h3><div class="foot"><div class="price"><small>Desde</small>$250.000 — $350.000</div><span class="btn">Ver producto</span></div></div>
+      <div class="card"><div class="ph"><img src="../383097607.jpg"><span>05</span></div><h3>Spa Day Mujeres</h3><div class="foot"><div class="price"><small>Desde</small>$110.000 — $160.000</div><span class="btn">Ver producto</span></div></div>
+      <div class="card"><div class="ph"><img src="../208853353.jpg"><span>06</span></div><h3>Spa Day</h3><div class="foot"><div class="price"><small>Desde</small>$110.000 — $320.000</div><span class="btn">Ver producto</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="res">
+  <div class="wrap">
+    <div class="top">
+      <div><div class="eyebrow">Reservá tu experiencia</div><h2>Tu momento,<br><em>a tu tiempo.</em></h2></div>
+      <div class="steps"><b>1 Experiencia</b><span>2 Fecha</span><span>3 Horario</span><span>4 Personas</span></div>
+    </div>
+    <div class="booking">
+      <div class="f"><label>Experiencia</label><div class="v">Elegir experiencia <i>▾</i></div></div>
+      <div class="f"><label>Fecha</label><div class="v">Elegir fecha <i>▾</i></div></div>
+      <div class="f"><label>Horario</label><div class="v muted">Según fecha</div></div>
+      <div class="f"><label>Personas</label><div class="v">2 personas <i>▾</i></div></div>
+      <div class="go">CONSULTAR DISPONIBILIDAD <span>→</span></div>
+    </div>
+    <p class="hint">Los horarios se muestran según la disponibilidad real de la fecha elegida.</p>
+  </div>
+</section>
+
+<section class="treat">
+  <div class="wrap grid">
+    <div class="ph"><img src="../586254522.jpg"></div>
+    <div>
+      <div class="eyebrow">Tratamientos</div>
+      <h2>Masajes y<br><em>tratamientos.</em></h2>
+      <p class="body" style="width:440px">Un espacio reservado para el cuidado personal, dentro del Spa de Blank Hotel.</p>
+      <div class="soon" style="width:520px"><b>Menú de tratamientos</b><span>Próximamente</span></div>
+      <span class="link">Consultar por WhatsApp</span>
+    </div>
+  </div>
+</section>
+
+<section class="vis">
+  <div class="bg"><img src="../blank-hotel-recoleta%20(2).jpg"></div>
+  <div class="scrim"></div>
+  <div class="wrap">
+    <div class="eyebrow">Huéspedes y visitantes</div>
+    <h2>No hace falta alojarte<br>para <em>disfrutarlo.</em></h2>
+    <p>El Spa está abierto tanto a quienes se hospedan en el hotel como a quienes nos visitan por el día.</p>
+    <span class="btn solid">Encontrá tu experiencia</span>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="top">
+      <div><div class="flogo"><img src="../public/images/logo-blank-hotel-recoleta-transparente.png"></div><p class="tag">Hotel &amp; Spa en el corazón de Buenos Aires.</p></div>
+      <div><h5>Visitanos</h5><ul><li>Peña 2049</li><li>Recoleta, CABA</li><li>Argentina</li></ul></div>
+      <div><h5>Contacto</h5><ul><li>Tel. 4800-1992</li><li>WhatsApp 11 6155-4966</li><li>@blankhotelrecoleta</li></ul></div>
+      <div><h5>Navegación</h5><ul><li>Hotel</li><li>Habitaciones</li><li>Spa</li><li>Ubicación</li><li>Contacto</li></ul></div>
+      <div><h5>Reservas</h5><ul><li>Reservar alojamiento</li><li>Spa &amp; Wellness</li><li>Experiencias</li></ul></div>
+    </div>
+    <div class="bot"><span>BLANK HOTEL RECOLETA — HOTEL &amp; SPA — BUENOS AIRES</span><span>© 2026</span></div>
+  </div>
+</footer>
+</body>
+</html>
